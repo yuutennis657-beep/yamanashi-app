@@ -14356,6 +14356,9 @@ jxPlanOpen = function(){
 #scr-map.vl #mh-c-h2 > .mc-first{grid-column:1 / -1;}
 #scr-map .mh-cards.mm-one > .jx-home{border:0;background:none;padding:0;box-shadow:none;}
 #scr-map .mh-cards.mm-one .mm-home-go{width:100%;min-height:72px;font-size:var(--f3);}
+/* 10/11：第3〜5時の〔わたしの 学習計画 ▶〕だけ 黄色だった → ほかの 時間の パネルと 同じ 藍の グラデーションに そろえる */
+#scr-map .mh-cards.mm-one .mm-home-go{background:linear-gradient(160deg,#2f6f8f,#173f58);color:#fff;border-radius:18px;box-shadow:0 5px 14px rgba(0,10,30,.35);}
+@media (hover:hover){#scr-map .mh-cards.mm-one .mm-home-go:hover{filter:brightness(1.08);}}
 #jy-full .mm-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:12px;padding:8px 16px;}
 #jy-full .mm-left,#jy-full .mm-right{min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:8px;}
 #jy-full .mm-hr{flex:none;border:2px solid #c3d3e2;border-radius:12px;background:#fff;}
