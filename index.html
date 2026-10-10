@@ -2,6 +2,12 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="やまなし">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
 <meta name="viewport" id="mb-vp" content="width=1366, viewport-fit=cover">
 <script>
 /* 見本だけ（スマホ よこ）：PC・Chromebook と 同じ 広さ（たて 約640px）に して、画面に 合わせて ちぢめて 見せる。
@@ -11,11 +17,12 @@
   function fit(){
     var w = window.innerWidth, h = window.innerHeight; if(!w || !h) return;
     var port = h > w, c;
-    if(port) c = "width=device-width, initial-scale=1, viewport-fit=cover";
+    if(port || document.documentElement.classList.contains("mb-guide-on")) c = "width=device-width, initial-scale=1, viewport-fit=cover";
     else c = "width=" + Math.max(1366, Math.ceil(640 * w / h)) + ", viewport-fit=cover";
     if(c !== last){ vp.setAttribute("content", c); last = c; }
     if(document.documentElement) document.documentElement.classList.toggle("mb-port", port && matchMedia("(pointer:coarse)").matches);
   }
+  window.mbFit = fit;
   fit();
   addEventListener("resize", fit);
   addEventListener("orientationchange", function(){ setTimeout(fit, 180); setTimeout(fit, 600); });
@@ -25,6 +32,26 @@
 <style>
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 #mb-rot{display:none;}
+
+/* 見本だけ：Safari → ホーム画面に追加 の 案内 */
+#mb-guide{display:none;}
+html.mb-guide-on #mb-guide{display:flex;position:fixed;inset:0;z-index:100000;overflow:auto;background:#fff;color:#1d2b33;
+  padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 16px max(16px,env(safe-area-inset-left));}
+html.mb-guide-on #mb-rot{display:none !important;}
+#mb-guide .mg-in{margin:auto;max-width:760px;width:100%;}
+#mb-guide h2{font-size:20px;margin:0 0 4px;}
+#mb-guide .mg-lead{font-size:15px;margin:0 0 10px;color:#3d4b53;}
+#mb-guide ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;}
+#mb-guide li{border:2px solid #b9cad3;border-radius:14px;padding:10px 12px;font-size:15px;line-height:1.55;}
+#mb-guide li.mg-done{border-color:#1f6b3a;background:#f1faf4;}
+#mb-guide li b.mg-n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#2f6f8f;color:#fff;font-size:15px;margin-right:6px;}
+#mb-guide li.mg-done b.mg-n{background:#1f6b3a;}
+#mb-guide li .mg-ok{display:none;color:#1f6b3a;font-weight:bold;}
+#mb-guide li.mg-done .mg-ok{display:inline;}
+#mb-guide .mg-ic{display:inline-block;border:1.5px solid #2f6f8f;border-radius:5px;padding:0 5px;color:#2f6f8f;font-weight:bold;}
+#mb-guide .mg-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 14px;margin-top:6px;border-radius:12px;
+  border:2px solid #2f6f8f;background:#2f6f8f;color:#fff;font:inherit;font-size:15px;font-weight:bold;text-decoration:none;cursor:pointer;}
+#mb-guide .mg-skip{display:block;margin:12px auto 0;min-height:44px;padding:0 16px;border:0;background:none;color:#3d4b53;font:inherit;font-size:15px;text-decoration:underline;cursor:pointer;}
 html.mb-port #mb-rot{display:flex;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;flex-direction:column;gap:16px;
   background:#fff;color:#1d2b33;font-size:20px;font-weight:bold;text-align:center;padding:24px;}
 html.mb-port #mb-rot i{font-style:normal;font-size:56px;display:block;transform:rotate(90deg);}
@@ -1951,6 +1978,22 @@ body.big-ui .hon-meate:not(.open) .hm-t,body.big-ui2 .hon-meate:not(.open) .hm-t
 </style>
 </head>
 <body>
+<div id="mb-guide" role="dialog" aria-label="ためす前に">
+  <div class="mg-in">
+    <h2>ためす前に（スマホ）</h2>
+    <p class="mg-lead">ホーム画面から ひらくと、上下の帯が 消えて PC と 同じ 広さで つかえます。</p>
+    <ol>
+      <li id="mg-s1"><b class="mg-n">1</b><b>Safari で ひらく</b> <span class="mg-ok">✓ いま Safari です</span>
+        <div id="mg-s1-how">LINE などの 中で ひらいたときは、右下の <span class="mg-ic">…</span> か <span class="mg-ic">⤴</span> から「Safari で 開く」を えらびます。
+          <br><a class="mg-btn" id="mg-open" href="#">Safari で ひらく</a> <button type="button" class="mg-btn" id="mg-copy">アドレスを コピー</button></div></li>
+      <li id="mg-s2"><b class="mg-n">2</b><b>ホーム画面に 追加</b><br>
+        <span id="mg-s2-ios">下（または 上）の 共有ボタン <span class="mg-ic">□↑</span> → 下へ すすんで「ホーム画面に追加」→「追加」。</span>
+        <span id="mg-s2-and" hidden>右上の <span class="mg-ic">⋮</span> →「ホーム画面に追加」（または「アプリを インストール」）。</span></li>
+      <li id="mg-s3"><b class="mg-n">3</b><b>ホーム画面の「やまなし」から ひらく</b><br>スマホを よこに して つかいます。</li>
+    </ol>
+    <button type="button" class="mg-skip" id="mg-skip">このまま ブラウザで ためす</button>
+  </div>
+</div>
 <div id="mb-rot" role="dialog" aria-label="スマホを よこに してね"><i aria-hidden="true">📱</i>スマホを よこに してね</div>
 <div id="app">
 
@@ -14491,6 +14534,51 @@ jxPlanOpen = function(){
     '#scr-map .topbar .aa-btn{flex:none;font-size:0;min-width:56px;min-height:48px;padding:0 12px;}' +
     '#scr-map .topbar .aa-btn::before{content:"Aa";font-size:var(--f2);}';
   document.head.appendChild(st);
+}
+
+/* ═══════ 見本（GitHub）だけ ═══════
+   ① 組・番・名前は 見本なので はじめから 入れておく（からの ときだけ）
+   ② スマホで ホーム画面から ひらいていないときは、さきに「Safari で ひらく → ホーム画面に 追加」を 案内する */
+{
+  const fillDemo = ()=>{
+    const v = (id, x)=>{ const el = document.getElementById(id); if(el && !el.value) el.value = x; };
+    v('inp-class', '1'); v('inp-num', '1'); v('inp-sei', 'みほん'); v('inp-mei', 'はなこ');
+  };
+  const _its = initTitleSelects;
+  initTitleSelects = function(){ const r = _its.apply(this, arguments); fillDemo(); return r; };
+  fillDemo();
+
+  const H = document.documentElement, ua = navigator.userAgent || '';
+  const standalone = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches;
+  const touch = matchMedia('(pointer:coarse)').matches;
+  let skipped = false;
+  try{ skipped = sessionStorage.getItem('mb-guide-skip') === '1'; }catch(e){}
+  if(touch && !standalone && !skipped){
+    const ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    const inApp = /Line\/|FBAN|FBAV|Instagram|CriOS|FxiOS|EdgiOS|GSA\//.test(ua);
+    const safari = ios && !inApp && /Safari/.test(ua);
+    const url = location.href.split('#')[0];
+    if(safari || !ios){ document.getElementById('mg-s1').classList.add('mg-done'); document.getElementById('mg-s1-how').hidden = true; }
+    if(!ios){
+      document.querySelector('#mg-s1 > b:not(.mg-n)').textContent = 'ブラウザで ひらく';
+      document.querySelector('#mg-s1 .mg-ok').textContent = '✓ いま ブラウザです';
+      document.getElementById('mg-s2-ios').hidden = true; document.getElementById('mg-s2-and').hidden = false;
+    }
+    /* LINE は ?openExternalBrowser=1 を つけると 外の ブラウザで ひらく */
+    document.getElementById('mg-open').href = url + (url.indexOf('?') < 0 ? '?' : '&') + 'openExternalBrowser=1';
+    document.getElementById('mg-copy').onclick = ()=>{
+      const done = ()=>toast('アドレスを コピーしたよ。Safari に 貼って ひらいてね');
+      try{ navigator.clipboard.writeText(url).then(done, ()=>prompt('この アドレスを コピーしてください', url)); }
+      catch(e){ prompt('この アドレスを コピーしてください', url); }
+    };
+    document.getElementById('mg-skip').onclick = ()=>{
+      H.classList.remove('mb-guide-on');
+      try{ sessionStorage.setItem('mb-guide-skip', '1'); }catch(e){}
+      if(window.mbFit) window.mbFit();
+    };
+    H.classList.add('mb-guide-on');
+    if(window.mbFit) window.mbFit();
+  }
 }
 
 </script>
