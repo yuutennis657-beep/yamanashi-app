@@ -14352,6 +14352,8 @@ jxPlanOpen = function(){
 #scr-map #mh-c-h6 > :not(.sh-mapcard):not(.mh-head){display:none !important;}
 /* 1つの 時間に 1つの ボタン（10/10 夜 担任「基本的に 一つの 時間 一つの ボタンに」）。いちばん はじめの ボタン（その 時間の 主な 活動）と、ふりかえり（評価に 使う）だけ 見せる。ほかは 消さずに かくす */
 #scr-map :is(#mh-c-h1,#mh-c-h2,#mh-c-h7,#mh-c-h8,#mh-c-h9) > :not(.mh-head):not(button:first-of-type):not(.mh-furi){display:none !important;}
+/* 10/11：第2時は かくした パネルが 右の 列を 取っていて「はじめの感想」が 半分の はばだった → 1つだけなので はばいっぱいに（第1・8・9時と そろえる） */
+#scr-map.vl #mh-c-h2 > .mc-first{grid-column:1 / -1;}
 #scr-map .mh-cards.mm-one > .jx-home{border:0;background:none;padding:0;box-shadow:none;}
 #scr-map .mh-cards.mm-one .mm-home-go{width:100%;min-height:72px;font-size:var(--f3);}
 #jy-full .mm-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:12px;padding:8px 16px;}
