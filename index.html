@@ -14445,6 +14445,26 @@ jxPlanOpen = function(){
 }`;
   document.head.appendChild(st);
 }
+/* ═══════ 谷マップの 上の 帯を わたしの問いに あける（10/11 伊藤「ここを消して」「文字の大きさはアイコンだけ」「その分 私の問いが たくさん出るように」）═══════
+   谷マップ・めあて／おわった ◯/10／名前 は 消さずに かくす（refreshMap が 書きこむので 節点は のこす）。
+   わたしの問い（#my-q）を 帯の 中（もどる と Aa の あいだ）へ うつし、横はば いっぱいに 問いを ならべる */
+{
+  const bar = document.querySelector('#scr-map .topbar'), q = document.getElementById('my-q');
+  if(bar && q) bar.insertBefore(q, bar.querySelector('.aa-btn'));
+  const aa = bar && bar.querySelector('.aa-btn');
+  if(aa) aa.title = '文字の 大きさ';
+  const st = document.createElement('style');
+  st.textContent =
+    '#scr-map .topbar .map-head,#scr-map .topbar .vl-prog,#scr-map .topbar #map-name-chip{display:none !important;}' +
+    '#scr-map .topbar{flex-wrap:nowrap;}' +   /* せまい 画面で 帯を 2段に していたのは 見出しの ため。見出しを かくしたので 1段に もどす */
+    '#scr-map .topbar .my-q{flex:1 1 auto;width:auto;max-width:none;min-width:0;margin:0;}' +
+    /* 問いが ならぶときは 折りかえして ぜんぶ 見せる（3行まで。それより 多いときだけ 中で 送る） */
+    '#scr-map .topbar .my-q:has(.myq-list){flex-wrap:wrap;row-gap:4px;border-radius:20px;padding:4px 8px 4px 16px;max-height:160px;overflow-y:auto;}' +
+    '#scr-map .topbar .my-q .myq-list{display:contents;}' +
+    '#scr-map .topbar .aa-btn{flex:none;font-size:0;min-width:56px;min-height:48px;padding:0 12px;}' +
+    '#scr-map .topbar .aa-btn::before{content:"Aa";font-size:var(--f2);}';
+  document.head.appendChild(st);
+}
 
 </script>
 </body>
