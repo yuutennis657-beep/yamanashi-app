@@ -2,7 +2,33 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" id="mb-vp" content="width=1366, viewport-fit=cover">
+<script>
+/* 見本だけ（スマホ よこ）：PC・Chromebook と 同じ 広さ（たて 約640px）に して、画面に 合わせて ちぢめて 見せる。
+   たてよこの 比は ちぢめても かわらないので、そこから はばを 決める。PC の ブラウザは この meta を 見ない */
+(function(){
+  var vp = document.getElementById("mb-vp"), last = "";
+  function fit(){
+    var w = window.innerWidth, h = window.innerHeight; if(!w || !h) return;
+    var port = h > w, c;
+    if(port) c = "width=device-width, initial-scale=1, viewport-fit=cover";
+    else c = "width=" + Math.max(1366, Math.ceil(640 * w / h)) + ", viewport-fit=cover";
+    if(c !== last){ vp.setAttribute("content", c); last = c; }
+    if(document.documentElement) document.documentElement.classList.toggle("mb-port", port && matchMedia("(pointer:coarse)").matches);
+  }
+  fit();
+  addEventListener("resize", fit);
+  addEventListener("orientationchange", function(){ setTimeout(fit, 180); setTimeout(fit, 600); });
+  addEventListener("DOMContentLoaded", fit);
+})();
+</script>
+<style>
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+#mb-rot{display:none;}
+html.mb-port #mb-rot{display:flex;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;flex-direction:column;gap:16px;
+  background:#fff;color:#1d2b33;font-size:20px;font-weight:bold;text-align:center;padding:24px;}
+html.mb-port #mb-rot i{font-style:normal;font-size:56px;display:block;transform:rotate(90deg);}
+</style>
 <title>イーハトーヴの谷 〜やまなし〜</title>
 <!-- ブックマーク／タブの アイコン（9/30）：カニ。Chrome は SVG・Safari は PNG・ホーム画面は 180px -->
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAwFBMVEUZXYPyakT9/v74hWHuVSseYIQNVHwhXYDRVDUtW3n0ZDsmZolzZWmtxdONWVT2gV2yZVZKW27k6+7VZUn0eFQ3cZKZY1xPYHN6obaJY2GpV0dzWV352tFrWmE6YHpdi6XGyctag5xikqz/Ux0wNjfcTyoCAACRlpfJXkSewtTbhXHNd2JgiKEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACWTgM9AAAAMHRSTlP///////////////////////////////////////////////////////////8AAABPGRnnAAABd0lEQVR42oVT6XqDIBAEsnIqiSdqUpM2PdLj/Z+vC2o8mn7Oj/3cnVlgByGMsawuI/IHUVlnSBLGEsPJQ3CTeEHCSfRYEBGeMJKZ/3ivMBmp+cRH0RT7Aq9JGb46p/ym4TAhKtcFouzXryilDSHnF5/42GCh6ncJvMac2k+WJRzPlSXW57oad1I05N8sfr+Uxsev0EHVIOhCVhn28XoxBGNiqlDqBoHIMYkJfz6dzpxg/OEkxlIuxj3iICDqTaoxDqURN507pKTEHiG9wOX6NrMsBTiiAPQBoQEFR4B0buoT5nFOB+QxdjwtbbeAkxXFfrfbFwXODHZ9MdiObI89LrLmHfbv7sA13IIWYaz5CjijWEiCdXgGhD/DcFXTmC3QFaCdxlQtgDws+YMEaMfLslewwuo5r7EA13FUZVN0SjaTUY1En1Kr1l67xlvduIXT4Z8SEtqlLy1I0dNlL5DLqe+VcvjthVhbGyr+t998OJtPb/vxbjz/XwNRFH8e9D6DAAAAAElFTkSuQmCC">
@@ -1925,6 +1951,7 @@ body.big-ui .hon-meate:not(.open) .hm-t,body.big-ui2 .hon-meate:not(.open) .hm-t
 </style>
 </head>
 <body>
+<div id="mb-rot" role="dialog" aria-label="スマホを よこに してね"><i aria-hidden="true">📱</i>スマホを よこに してね</div>
 <div id="app">
 
 <!-- ═══════ タイトル ═══════ -->
